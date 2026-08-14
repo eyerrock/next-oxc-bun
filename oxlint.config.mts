@@ -7,7 +7,17 @@ export default defineConfig({
     reportUnusedDisableDirectives: "error",
   },
 
-  plugins: ["eslint", "typescript", "unicorn", "oxc", "import", "react", "react-perf", "nextjs", "jsx-a11y"],
+  plugins: [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "react",
+    "react-perf",
+    "nextjs",
+    "jsx-a11y",
+  ],
 
   categories: {
     correctness: "error",
@@ -54,5 +64,4 @@ export default defineConfig({
     "unicorn/prefer-node-protocol": "error",
     "react/react-compiler": "warn",
   },
-
 });
