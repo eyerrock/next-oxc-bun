@@ -15,6 +15,7 @@ jobs:
         with:
           bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
+      - run: bun run typegen
       - run: bun run lint
 
   format:
@@ -45,4 +46,5 @@ jobs:
         with:
           bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
+      - run: bun run typegen
       - run: bun run build
