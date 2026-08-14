@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  // See https://docs.renovatebot.com/presets-config/
+  "extends": [
+    "config:best-practices",
+    ":approveMajorUpdates",
+    ":labels(renovate)",
+    ":enableVulnerabilityAlertsWithAdditionalLabel(security)"
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": ["before 4am on Monday"],
+  // Limit the number of concurrent PRs
+  "prConcurrentLimit": 5,
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      // Runtime dependencies
+      // keep semver ranges, but bump to the new version on update
+      "matchManagers": ["bun"],
+      "matchDepTypes": ["dependencies"],
+      "groupName": "dependencies",
+      "groupSlug": "deps",
+      "rangeStrategy": "bump",
+      "addLabels": ["dependencies"]
+    },
+    {
+      // Dev dependencies
+      // remain pinned via config:best-practices
+      "matchManagers": ["bun"],
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev-dependencies",
+      "groupSlug": "dev-deps",
+      "addLabels": ["dev-dependencies"]
+    },
+
+    {
+      // Bun itself
+      "matchManagers": ["bun-version"],
+      "addLabels": ["runtime", "bun"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      // GitHub Actions
+      // grouped by manager and automerged via PR (merge after passing tests)
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "groupSlug": "github-actions",
+      "addLabels": ["github-actions"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
+}
