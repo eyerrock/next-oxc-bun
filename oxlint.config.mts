@@ -62,6 +62,5 @@ export default defineConfig({
     "eslint/no-console": ["warn", { allow: ["warn", "error"] }],
     "typescript/no-explicit-any": "warn",
     "unicorn/prefer-node-protocol": "error",
-    "react/react-compiler": "warn",
   },
 });
