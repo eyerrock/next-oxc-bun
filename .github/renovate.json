@@ -12,6 +12,10 @@
   // Limit the number of concurrent PRs
   "prConcurrentLimit": 5,
   "dependencyDashboard": true,
+  // Pin Bun version
+  "constraints": {
+    "bun": "1.3.14"
+  },
   "packageRules": [
     {
       // Runtime dependencies
