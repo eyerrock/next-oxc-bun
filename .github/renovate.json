@@ -43,11 +43,14 @@
     },
     {
       // Bun used by Renovate itself for lockfile/artifact updates.
-      // Must stay in lockstep with the runtime Bun above (mismatches have broken lockfile-maintenance PRs before), so gate it the same way
+      // Must stay in lockstep with the runtime Bun above (mismatches have broken lockfile-maintenance PRs before), so gate it the same way,
+      // and give it the same 3-day minimum release age that config:best-practices already applies to the npm-sourced Bun entries
+      // (this one resolves via github-releases, which that npm-scoped rule doesn't cover).
       "matchManagers": ["renovate-config"],
       "matchDepNames": ["bun"],
       "addLabels": ["tooling", "bun"],
-      "dependencyDashboardApproval": true
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": "3 days"
     },
     {
       // GitHub Actions
