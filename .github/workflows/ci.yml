@@ -7,6 +7,23 @@ on:
     branches: [main]
 
 jobs:
+  bun-version-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Check .bun-version, package.json, and renovate.json agree on Bun version
+        run: |
+          BUN_VERSION_FILE=$(tr -d '[:space:]' < .bun-version)
+          PACKAGE_MANAGER=$(jq -r '.packageManager' package.json | sed 's/^bun@//')
+          RENOVATE_CONSTRAINT=$(grep -v '^[[:space:]]*//' .github/renovate.json | jq -r '.constraints.bun')
+
+          if [ "$BUN_VERSION_FILE" != "$PACKAGE_MANAGER" ] || [ "$BUN_VERSION_FILE" != "$RENOVATE_CONSTRAINT" ]; then
+            echo "::error::Bun version mismatch — .bun-version=$BUN_VERSION_FILE package.json#packageManager=$PACKAGE_MANAGER renovate.json#constraints.bun=$RENOVATE_CONSTRAINT"
+            exit 1
+          fi
+
+          echo "Bun version consistent across all three sources: $BUN_VERSION_FILE"
+
   lint:
     runs-on: ubuntu-latest
     steps:

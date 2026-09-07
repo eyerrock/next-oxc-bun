@@ -19,12 +19,10 @@
   "packageRules": [
     {
       // Runtime dependencies
-      // keep semver ranges, but bump to the new version on update
       "matchManagers": ["bun"],
       "matchDepTypes": ["dependencies"],
       "groupName": "dependencies",
       "groupSlug": "deps",
-      "rangeStrategy": "bump",
       "addLabels": ["dependencies"]
     },
     {
@@ -38,9 +36,17 @@
     },
 
     {
-      // Bun itself
+      // Project Bun runtime (.bun-version, package.json#packageManager)
       "matchManagers": ["bun-version"],
       "addLabels": ["runtime", "bun"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      // Bun used by Renovate itself for lockfile/artifact updates.
+      // Must stay in lockstep with the runtime Bun above (mismatches have broken lockfile-maintenance PRs before), so gate it the same way
+      "matchManagers": ["renovate-config"],
+      "matchDepNames": ["bun"],
+      "addLabels": ["tooling", "bun"],
       "dependencyDashboardApproval": true
     },
     {
@@ -52,6 +58,26 @@
       "addLabels": ["github-actions"],
       "automerge": true,
       "automergeType": "pr"
+    },
+    {
+      // Next.js + React are version-coupled; update together to avoid a
+      // half-upgraded state between them.
+      "matchPackageNames": [
+        "next",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
+        "babel-plugin-react-compiler"
+      ],
+      "groupName": "next-react",
+      "groupSlug": "next-react"
+    },
+    {
+      // oxc toolchain: companion packages, kept in sync with each other
+      "matchPackageNames": ["oxlint", "oxfmt", "oxlint-tsgolint"],
+      "groupName": "oxc",
+      "groupSlug": "oxc"
     }
   ]
 }
