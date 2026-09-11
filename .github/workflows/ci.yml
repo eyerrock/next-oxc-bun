@@ -11,26 +11,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Check .bun-version, package.json, and renovate.json agree on Bun version
+      - name: Check Bun version consistency
         run: |
-          BUN_VERSION_FILE=$(tr -d '[:space:]' < .bun-version)
-          PACKAGE_MANAGER=$(jq -r '.packageManager' package.json | sed 's/^bun@//')
-          RENOVATE_CONSTRAINT=$(grep -v '^[[:space:]]*//' .github/renovate.json | jq -r '.constraints.bun')
+          PACKAGE_MANAGER=$(jq -r '.packageManager // empty' package.json | sed 's/^bun@//')
+          RENOVATE_CONSTRAINT=$(sed -n \
+            '/"constraints"[[:space:]]*:/,/^[[:space:]]*}/ s/.*"bun"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+            .github/renovate.jsonc)
 
-          if [ "$BUN_VERSION_FILE" != "$PACKAGE_MANAGER" ] || [ "$BUN_VERSION_FILE" != "$RENOVATE_CONSTRAINT" ]; then
-            echo "::error::Bun version mismatch — .bun-version=$BUN_VERSION_FILE package.json#packageManager=$PACKAGE_MANAGER renovate.json#constraints.bun=$RENOVATE_CONSTRAINT"
+          if [ -z "$PACKAGE_MANAGER" ]; then
+            echo "::error::Missing package.json#packageManager"
             exit 1
           fi
 
-          echo "Bun version consistent across all three sources: $BUN_VERSION_FILE"
+          if [ -z "$RENOVATE_CONSTRAINT" ]; then
+            echo "::error::Missing renovate.jsonc#constraints.bun"
+            exit 1
+          fi
+
+          if [ "$PACKAGE_MANAGER" != "$RENOVATE_CONSTRAINT" ]; then
+            echo "::error::Bun version mismatch — package.json#packageManager=$PACKAGE_MANAGER renovate.jsonc#constraints.bun=$RENOVATE_CONSTRAINT"
+            exit 1
+          fi
+
+          echo "Bun version consistent: $PACKAGE_MANAGER"
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
       - run: bun run typegen
       - run: bun run lint
@@ -40,8 +49,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
       - run: bun run format
 
@@ -50,8 +57,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
       - run: bun run typecheck
 
@@ -60,8 +65,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
       - run: bun run typegen
       - run: bun run build
