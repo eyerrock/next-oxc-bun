@@ -51,4 +51,13 @@ export default defineConfig({
     stylesheet: "./src/app/globals.css",
     functions: ["cn", "clsx", "cva", "tw"],
   },
+
+  overrides: [
+    {
+      files: [".github/renovate.jsonc"],
+      options: {
+        trailingComma: "none",
+      },
+    },
+  ],
 });

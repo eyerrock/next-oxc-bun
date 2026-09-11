@@ -34,21 +34,13 @@
       "groupSlug": "dev-deps",
       "addLabels": ["dev-dependencies"]
     },
-
     {
-      // Project Bun runtime (.bun-version, package.json#packageManager)
-      "matchManagers": ["bun-version"],
-      "addLabels": ["runtime", "bun"],
-      "dependencyDashboardApproval": true
-    },
-    {
-      // Bun used by Renovate itself for lockfile/artifact updates.
-      // Must stay in lockstep with the runtime Bun above (mismatches have broken lockfile-maintenance PRs before), so gate it the same way,
-      // and give it the same 3-day minimum release age that config:best-practices already applies to the npm-sourced Bun entries
-      // (this one resolves via github-releases, which that npm-scoped rule doesn't cover).
-      "matchManagers": ["renovate-config"],
+      // Keep the project Bun runtime and Renovate's Bun tool version in sync
+      "matchManagers": ["bun", "renovate-config"],
       "matchDepNames": ["bun"],
-      "addLabels": ["tooling", "bun"],
+      "groupName": "Bun",
+      "groupSlug": "bun",
+      "addLabels": ["bun"],
       "dependencyDashboardApproval": true,
       "minimumReleaseAge": "3 days"
     },
