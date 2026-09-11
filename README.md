@@ -13,9 +13,12 @@ This repo is a [GitHub template](https://docs.github.com/en/repositories/creatin
 - [ ] Replace the page metadata in `src/app/layout.tsx` — `title`/`description` still say "Create Next App"
 - [ ] Replace this README with your own project's documentation
 - [ ] Update the copyright holder in `LICENSE` if you're keeping MIT, or swap in your own license
-- [ ] Review `.github/renovate.json` — the schedule, PR grouping, and approval gates were tuned for this template's original repo; adjust for your own workflow
+- [ ] Review `.github/renovate.jsonc` — the schedule, PR grouping, and approval gates were tuned for this template's original repo; adjust for your own workflow
 
 ## Getting Started
+
+The required Bun version is pinned in `package.json#packageManager`.
+`bun install` runs a preinstall check that compares your local Bun version with the pinned version and fails if they do not match.
 
 Install dependencies and run the development server:
 
@@ -58,7 +61,7 @@ No test framework is set up. Bun ships a built-in, Jest-compatible test runner (
 
 CI runs on every push/PR to `main` — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the current set of checks.
 
-Dependency updates are automated via [Renovate](https://docs.renovatebot.com/) — see [`.github/renovate.json`](.github/renovate.json) for the schedule, grouping, and approval rules.
+Dependency updates are automated via [Renovate](https://docs.renovatebot.com/) — see [`.github/renovate.jsonc`](.github/renovate.jsonc) for the schedule, grouping, and approval rules.
 
 ## Learn More
 
