@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project using [Bun](https://bun.sh) as the runtime/package manager and [oxc](https://oxc.rs) (oxlint + oxfmt) for linting and formatting instead of ESLint/Prettier.
 
+> Created with the [next-oxc-bun](https://github.com/eyerrock/next-oxc-bun) template.
+
 > [!IMPORTANT]
 > This project pins a Next.js version that may include breaking changes relative to what you know. Before writing code, read the relevant guide in `node_modules/next/dist/docs/`.
 >
