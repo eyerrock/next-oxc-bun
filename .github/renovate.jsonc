@@ -11,7 +11,9 @@
   "schedule": ["before 4am on Monday"],
   // Limit the number of concurrent PRs
   "prConcurrentLimit": 5,
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   // Pin Bun version
   "constraints": {
     "bun": "1.4.4"
